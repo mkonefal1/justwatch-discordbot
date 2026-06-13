@@ -112,16 +112,17 @@ def parse_justwatch_with_counters(html_content):
         soup = BeautifulSoup(html_content, "html.parser")
         today_groups = {}
 
-        time_blocks = soup.select(".timeline__time-block")
-        if not time_blocks:
-            time_blocks = soup.find_all("div", class_=re.compile(r"time-block|timeframe"))
+        # Używamy bardziej elastycznego selektora CSS, który obejmuje klasy .timeline__time-block, .time-block i .timeframe
+        # aby upewnić się, że znajdziemy odpowiednie bloki niezależnie od konkretnej struktury HTML.
+        time_blocks = soup.select(".timeline__time-block, div[class*='time-block'], div[class*='timeframe']")
 
         if not time_blocks:
             logger.error("Nie znaleziono bloków osi czasu (premier) w wyrenderowanym kodzie HTML.")
             return None
 
         today_block = time_blocks[0]
-        provider_blocks = today_block.select(".timeline__provider-block") or today_block.find_all("div", class_=re.compile(r"provider-block"))
+        # Wybieramy bloki dostawców w ramach znalezionego bloku dnia.
+        provider_blocks = today_block.select(".timeline__provider-block, div[class*='provider-block']")
         
         logger.info(f"Przetwarzanie wyrenderowanych dostawców VOD (wykryto sekcji: {len(provider_blocks)})...")
 
@@ -191,14 +192,12 @@ def generate_discord_message(grouped_data):
             items = data["items"]
             visible_count = len(items)
             total_reported = max(data["total_count"], visible_count)
-            slug = data["slug"]
-            
-            clean_platform = platform.lower().replace(" ", "").replace("+", "plus")
-            
+            slug = data["slug"] # Wykorzystujemy już istniejący slug
+
             if total_reported > visible_count:
-                message_lines.append(f"\n`/{clean_platform}/` — **{total_reported} pozycji** *(widzisz pierwsze {visible_count})*\n")
+                message_lines.append(f"\n`/{slug}/` — **{total_reported} pozycji** *(widzisz pierwsze {visible_count})*\n")
             else:
-                message_lines.append(f"\n`/{clean_platform}/` — **{visible_count} pozycji**\n")
+                message_lines.append(f"\n`/{slug}/` — **{visible_count} pozycji**\n")
             
             for title, link in items:
                 message_lines.append(f"- [{title}](<{link}>)")
