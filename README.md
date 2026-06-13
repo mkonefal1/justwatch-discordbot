@@ -23,41 +23,40 @@ This guide assumes you have Python 3.9 or newer installed on your computer or VP
 
 ### 1. Repository Cloning and Environment Setup
 Navigate to the project directory and create an isolated virtual environment `.venv`:
-
-'''bash
 # Create a virtual environment
+```bash
 python3 -m venv .venv
-'''
+```
 
 # Activate the environment (macOS / Linux)
-'''bash
+```bash
 source .venv/bin/activate
-'''
+```
 
 # Activate the environment (Windows PowerShell)
-'''bash
+```bash
 .venv\Scripts\Activate.ps1
-'''
+```
 
 ### 2. Install Lightweight Production Dependencies
 
 Install the required packages from the requirements.txt file:
-'''bash
+```bash
 pip install -r requirements.txt
-'''
+```
 
 ### 3. Install the Playwright Binary Browser
 
 This is a crucial step — without it, the script will not be able to launch the headless Chromium engine:
 
-'''bash
+```bash
 playwright install chromium
-'''
+```
 
 # IF YOU ARE ON A VPS (Ubuntu/Debian) and lack system libraries for the browser, also execute:
-'''bash
+```bash
 playwright install-deps
-'''
+```
 
 ---
 
@@ -66,23 +65,23 @@ playwright install-deps
 ### 1. First Run and Saving the Webhook
 The script stores the Discord webhook URL in a `config.json` file. You can automatically generate and permanently update it using the built-in `-webhookUpdate` flag:
 
-'''bash
+```bash
 python3 justwatch_today.py -webhookUpdate "PASTE_YOUR_DISCORD_WEBHOOK_URL_HERE"
-'''
+```
 
 ### 2. Connection Test
 To ensure communication with Discord works flawlessly without running the entire JustWatch parser, execute:
 
-'''bash
+```bash
 python3 justwatch_today.py -test
-'''
+```
 
 ### 3. Production Run (Full Report)
 To fetch today's premieres and send the report to your channel, simply run the script without any parameters:
 
-'''bash
+```bash
 python3 justwatch_today.py
-'''
+```
 
 ---
 
@@ -92,15 +91,15 @@ To have the bot send the report every morning (e.g., at 07:30 AM), it is best to
 
 Open the cron task editor:
 
-'''bash
+```bash
 crontab -e
-'''
+```
 
 Append the rule at the very bottom of the file, specifying the **absolute paths** to the Python interpreter inside `.venv` and to the script itself:
 
-'''plaintext
+```plaintext
 30 07 * * * /Users/XXX/.../JustWatch-bot/.venv/bin/python3 /Users/XXX/.../JustWatch-bot/justwatch_today.py > /dev/null 2>&1
-'''
+```
 
 *(Remember to replace the template paths `/Users/XXX/...` above with the real absolute path to your project on the server, which you can check by typing the `pwd` command in your terminal).*
 
