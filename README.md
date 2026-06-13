@@ -38,7 +38,7 @@ source .venv/bin/activate
 .venv\Scripts\Activate.ps1
 ```
 
-### 2. Install Lightweight Production Dependencies
+### 2. Install Production Dependencies
 
 Install the required packages from the requirements.txt file:
 ```bash
@@ -143,7 +143,7 @@ source .venv/bin/activate
 .venv\Scripts\Activate.ps1
 ```
 
-### 2. Instalacja odchudzonych zależności produkcyjnych
+### 2. Instalacja zależności produkcyjnych
 
 Zainstaluj wymagane pakiety z pliku requirements.txt:
 ```bash
